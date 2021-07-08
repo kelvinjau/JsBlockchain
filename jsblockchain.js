@@ -40,6 +40,26 @@ class Blockchain{
         this.chain.push(newBlock);
     }
 
+    checkBlockchainValid(){
+
+        for(let i = 1; i <= this.chain.length-1; i++){
+            let currentBlock = this.chain[i];
+            let previousBlock = this.chain[i - 1];
+
+            if(currentBlock.hash !== currentBlock.calculateHash()){
+                console.log(currentBlock.hash);
+                console.log(currentBlock.calculateHash());
+                return false;
+            }
+
+            if(currentBlock.previousHash !== previousBlock.hash){
+                
+                return false;
+            }
+        }
+        return true;
+    }
+
     //new block object.
     //the hash of previous block.
     //calculate the current hash.
@@ -58,3 +78,8 @@ myBlockchain.addBlock(block1);
 myBlockchain.addBlock(block2);
 
 console.log(JSON.stringify(myBlockchain,null,4));
+console.log("Validation Check for the BlockChain before hacking: "+myBlockchain.checkBlockchainValid());
+
+myBlockchain.chain[1].data = {message : 300}
+console.log(JSON.stringify(myBlockchain,null,4));
+console.log("Validation Check for the BlockChain before hacking: "+myBlockchain.checkBlockchainValid());
