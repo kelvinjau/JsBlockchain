@@ -7,13 +7,30 @@ class Block{
         this.data = data;
         this.previousHash = previousHash;
         this.hash = this.calculateHash();
+        this.nonce = 0;
     }
 
     calculateHash(){
         /**
         * This will be using SHA256 cryptographic function to generate hash of this block.
         */
-        return SHA256(this.index+this.timestamp+this.previousHash+JSON.stringify(this.data)).toString();
+        return SHA256(this.index+this.timestamp+this.previousHash+JSON.stringify(this.data)+this.nonce).toString();
+    }
+
+    /**
+    *   Proof of Work
+    *   @param difficulty to the hash i.e. conditions for the miner to mine the block which gives hash value 
+    *   starting from 3 zeros i.e. "000xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" or 4 zeros i.e. "0000xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    *   
+    *   This becomes difficulty for miners to mine a new block. Hence prevent hackers to temper the block.
+    *   i.e. more complex difficulty require more computational power.
+    */
+    mineNewBlock(difficulty){
+        while(this.hash.substring(0,difficulty) !== Array(difficulty + 1).join("0")){
+            this.nonce++;
+            this.hash = this.calculateHash();
+        }
+        console.log("A new block was mined with hash "+ this.hash);
     }
 }
 
@@ -24,6 +41,7 @@ class Blockchain{
         * The first variable of the array will be the genesis block and created manually.
         */
         this.chain = [this.createGenesisBlock()];
+        this.difficulty = 5;
     }
 
     createGenesisBlock(){
@@ -36,7 +54,7 @@ class Blockchain{
 
     addBlock(newBlock){
         newBlock.previousHash = this.getLatestBlock().hash;
-        newBlock.hash = newBlock.calculateHash();
+        newBlock.mineNewBlock(this.difficulty);
         this.chain.push(newBlock);
     }
 
@@ -50,8 +68,7 @@ class Blockchain{
                 return false;
             }
 
-            if(currentBlock.previousHash !== previousBlock.hash){
-                
+            if(currentBlock.previousHash !== previousBlock.hash){ 
                 return false;
             }
         }
@@ -72,12 +89,12 @@ let block2 = new Block(1,"03/01/2008",{message : 50});
 let myBlockchain = new Blockchain();
 
 //addin the new blocks to the blockchain
+console.log("The first block creation");
 myBlockchain.addBlock(block1);
+console.log("The second block creation");
 myBlockchain.addBlock(block2);
 
 console.log(JSON.stringify(myBlockchain,null,4));
 console.log("Validation Check for the BlockChain before hacking: "+myBlockchain.checkBlockchainValid());
 
-myBlockchain.chain[1].data = {message : 300}
-console.log(JSON.stringify(myBlockchain,null,4));
-console.log("Validation Check for the BlockChain before hacking: "+myBlockchain.checkBlockchainValid());
+
