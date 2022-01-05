@@ -115,20 +115,46 @@ class Blockchain{
     //push the block in block chain.
 }
 
-let bittyCoin = new Blockchain();
+/*
+//create two blocks
+let block1 = new Block(1,"05/01/2022", {"myBalance": 100});
+let block2 = new Block(2,"06/01/2022", {"myBalance": 200});
+
+//create new blockchain
+let myBlockChain = new BlockChain();
+
+//add the blocks
+myBlockChain.addBlock(block1);
+myBlockChain.addBlock(block2);
+
+
+console.log(JSON.stringify(myBlockChain, null,4));
+console.log("First Validating Block chain : "+myBlockChain.checkBlockValidity());
+
+//try alter blockchain
+myBlockChain.chain[1].data =  {"myBalance": 700};
+
+//validating again, its false
+console.log("Second Validating Block chain : "+myBlockChain.checkBlockValidity());
+*/
+
+
+
+let kelvinCoin = new Blockchain();
 
 transaction1 = new Transactions("tom", "jerry", 100);
-bittyCoin.createTransaction(transaction1);
+kelvinCoin.createTransaction(transaction1);
 
 transaction2 = new Transactions("jerry", "tom", 30);
-bittyCoin.createTransaction(transaction2);
+kelvinCoin.createTransaction(transaction2);
 
+//donald will have zero because his transaction is still pending and hasnt been validated
 console.log("Started mining by miner...");
-bittyCoin.minePendingTransactions("donald");
+kelvinCoin.minePendingTransactions("donald");
 
-console.log("Balance for tom is: "+bittyCoin.getBalanceOfAddress("tom"));
-console.log("Balance for jerry is: "+bittyCoin.getBalanceOfAddress("jerry"));
-console.log("Balance for miner donald is: "+bittyCoin.getBalanceOfAddress("donald"));
+console.log("Balance for tom is: "+kelvinCoin.getBalanceOfAddress("tom"));
+console.log("Balance for jerry is: "+kelvinCoin.getBalanceOfAddress("jerry"));
+console.log("Balance for miner donald is: "+kelvinCoin.getBalanceOfAddress("donald"));
 
-bittyCoin.minePendingTransactions("donald");
-console.log("Balance for miner donald is: "+bittyCoin.getBalanceOfAddress("donald"));
+kelvinCoin.minePendingTransactions("donald");
+console.log("Balance for miner donald is: "+kelvinCoin.getBalanceOfAddress("donald"));
